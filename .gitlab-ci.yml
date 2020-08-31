@@ -1,0 +1,31 @@
+image: registry.cn-shanghai.aliyuncs.com/choerodon-tools/cibase:0.9.1
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - npm install --registry https://nexus.gobuildrun.com/repository/br_npm/ --sass-binary-site=http://npm.taobao.org/mirrors/node-sass
+    - chmod -R 755 node_modules
+    - npm run compile
+    - echo '//${NPM_REGISTRY}:_authToken=${NPM_TOKEN}'>.npmrc
+    - npm publish --registry https://nexus.gobuildrun.com/repository/br_private_npm/
+  only:
+    refs:
+      - master
+      - next
+      - tags
+      - /^release-.*$/
+      - /^hotfix-.*$/
+
+.auto_devops: &auto_devops |
+  http_status_code=`curl -o .auto_devops.sh -s -m 10 --connect-timeout 10 -w %{http_code} "${CHOERODON_URL}/devops/ci?token=${Token}&type=microservice"`
+  if [ "$http_status_code" != "200" ]; then
+    cat .auto_devops.sh
+    exit 1
+  fi
+  source .auto_devops.sh
+
+before_script:
+  - *auto_devops
