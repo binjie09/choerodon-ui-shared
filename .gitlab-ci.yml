@@ -9,15 +9,26 @@ build:
     - npm install --registry https://nexus.gobuildrun.com/repository/br_npm/ --sass-binary-site=http://npm.taobao.org/mirrors/node-sass
     - chmod -R 755 node_modules
     - npm run compile
+    - npm run pre-publish
     - echo '//${NPM_REGISTRY}:_authToken=${NPM_TOKEN}'>.npmrc
     - npm publish --registry https://nexus.gobuildrun.com/repository/br_private_npm/
   only:
     refs:
       - master
-      - next
-      - tags
       - /^release-.*$/
       - /^hotfix-.*$/
+
+release:
+  stage: build
+  script:
+    - npm install --registry https://nexus.gobuildrun.com/repository/br_npm/ --sass-binary-site=http://npm.taobao.org/mirrors/node-sass
+    - chmod -R 755 node_modules
+    - npm run compile
+    - echo '//${NPM_REGISTRY}:_authToken=${NPM_TOKEN}'>.npmrc
+    - npm publish --registry https://nexus.gobuildrun.com/repository/br_private_npm/
+  only:
+    refs:
+      - tags
 
 .auto_devops: &auto_devops |
   http_status_code=`curl -o .auto_devops.sh -s -m 10 --connect-timeout 10 -w %{http_code} "${CHOERODON_URL}/devops/ci?token=${Token}&type=microservice"`
