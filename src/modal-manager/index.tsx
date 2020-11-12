@@ -1,12 +1,15 @@
 import { action, observable } from 'mobx';
 
+export type MousePosition = { x: number; y: number };
+
+export type DrawerOffsets = { 'slide-up': number[], 'slide-right': number[], 'slide-down': number[], 'slide-left': number[] };
+
 export interface IModalContainer {
   maskHidden: boolean;
+  drawerOffsets: DrawerOffsets;
 
   clear();
 }
-
-export type MousePosition = { x: number; y: number };
 
 export type ModalManagerType = {
   containerInstances: IModalContainer[];
