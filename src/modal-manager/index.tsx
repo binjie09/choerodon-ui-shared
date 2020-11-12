@@ -33,6 +33,7 @@ const ModalManager = {
   removeInstance,
   getKey,
   mousePositionEventBound: false,
+  containerInstances,
 };
 
 export default ModalManager;
