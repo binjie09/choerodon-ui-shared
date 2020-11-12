@@ -40,7 +40,7 @@ const removeInstance: (instance: IModalContainer) => void = action((instance: IM
 
 const addInstance: (instance: IModalContainer) => void = action((instance: IModalContainer) => {
   removeInstance(instance);
-  containerInstances.push(instance);
+  containerInstances.unshift(instance);
 });
 
 function getKey(): string {
