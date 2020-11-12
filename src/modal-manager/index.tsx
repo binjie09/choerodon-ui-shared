@@ -1,17 +1,22 @@
 import { action, observable } from 'mobx';
 
 export interface IModalContainer {
+  maskHidden: boolean;
+
+  clear();
 }
 
 export type MousePosition = { x: number; y: number };
 
 export type ModalManagerType = {
+  containerInstances: IModalContainer[];
   addInstance: (instance: IModalContainer) => void;
   removeInstance: (instance: IModalContainer) => void;
   getKey: () => string;
   mousePositionEventBound: boolean;
   mousePosition?: MousePosition;
-  containerInstances: IModalContainer[];
+  defaultBodyStyle?: { overflow; paddingRight };
+  root?: HTMLDivElement;
 }
 
 const KeyGen = (function* (id) {
