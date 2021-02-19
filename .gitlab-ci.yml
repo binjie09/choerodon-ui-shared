@@ -25,7 +25,7 @@ release:
     - chmod -R 755 node_modules
     - npm run compile
     - echo '//${NPM_REGISTRY}:_authToken=${NPM_TOKEN}'>.npmrc
-    - npm publish --registry https://nexus.gobuildrun.com/repository/br_private_npm/
+    - npm publish --registry https://${NPM_REGISTRY}
   only:
     refs:
       - tags
